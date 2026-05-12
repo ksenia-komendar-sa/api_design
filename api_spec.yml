@@ -1,0 +1,128 @@
+openapi: 3.0.0
+info:
+  title: API сервиса Lucky Insurance
+  description: >-
+    Коллекция запросов API сервиса. Сервис предоставляет информацию о страховках для животных
+  version: 1.0.1
+  contact:
+    name: Lucky Insurance API
+    url: https://lucky.com/info
+    email: LuckyInsurances@lucky.com
+  termsOfService: https://lucky.com/terms
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://4453f729-1913-49be-9dcc-b7a316afa17f.mock.pstmn.io
+    description: Lucky Mock 
+tags:
+  - name: Insurance API
+paths:
+  /insurance:
+    get:
+      tags:
+        - Insurance API
+      summary: Получение списка страховок
+      description: Возвращает список доступных страховых программ для животных
+      operationId: getInsuranceList
+      parameters:
+        - name: petType
+          in: query
+          required: false
+          description: Фильтр по виду питомца
+          schema:
+            type: string
+            enum:
+              - кошка
+              - собака
+          example: кошка
+      responses:
+        '200':
+          description: Список страховых программ
+          content:
+            application/json:
+              schema: 
+               type: object
+               properties:
+                  description: 
+                    type: string
+                    description: Общее описание услуги
+                    example: Помощь ветеринара 24/7. Онлайн консультации. Большой выбор ветклиник.
+                  insurances:
+                    type: array
+                    items: 
+                     $ref: '#/components/schemas/Insurance'
+        '400':
+          description: Некорректный запрос / Bad Request
+          content:
+            application/json:
+             schema:
+               $ref: '#/components/schemas/error_response'
+             example: 
+              code: 400
+              message: Некорректные параметры запроса
+        '500': 
+          description: Внутренняя ошибка сервера / Internal Server Error
+          content:
+            application/json:
+             schema:
+               $ref: '#/components/schemas/error_response'
+             example: 
+              code: 500
+              message: Внутренняя ошибка сервера
+        '502':
+          description: Ошибка шлюза / Bad Gateway
+          content:
+            application/json:
+             schema:
+               $ref: '#/components/schemas/error_response'
+             example: 
+              code: 502
+              message: Ошибка шлюза
+components:
+  schemas:
+     Insurance:
+      required:
+        - type
+        - details
+        - price
+        - currency
+        - period
+      type: object
+      properties:
+        type: 
+          type: string
+          description: Вид питомца
+          example: кошка
+          enum: 
+            - кошка
+            - собака
+        details:
+          type: string
+          description: Описание условий по страховке
+          example: Круглосуточные консультации ветеринарного врача по телефону, в чате или видеосвязи. Включена ежегодная вакцинация от бешенства.
+        price:
+          type: integer
+          description: Цена страховки
+          example: 35000
+        currency:
+          type: string
+          description: Валюта 
+          example: 'рублей'
+        period:
+          type: string
+          description: Период действия страховки
+          example: 'в год'
+     error_response:
+      type: object
+      required: 
+       - code
+       - message
+      properties:
+        code:
+          type: integer
+          description: HTTP-код ошибки
+        message:
+          type: string
+          description: Описание ошибки
+           
