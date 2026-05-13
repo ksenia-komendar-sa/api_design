@@ -25,7 +25,7 @@ LUCKY - мобильное приложение для владельцев до
  ![C4](artifacts/c4_container.png)
 
 - Документ с профилем API - (Job Story, действия пользователей, границы API, описание операций)
-![]()
+[Профиль API](artifacts/api_profile.pdf)
 - Документация API - Спецификация OpenAPI 3.0 (YAML)
 [Открыть документацию API](artifacts/api_spec.yml)
 
